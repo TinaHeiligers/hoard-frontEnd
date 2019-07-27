@@ -23,8 +23,12 @@ export class SideNav extends Component {
     this.setState({
       selectedItemName: name,
     });
+    this.showItemClicked(name);
   };
 
+  showItemClicked = (name) => {
+    this.props.setItem(name)
+  }
   createItem = (name, data = {}) => {
     // NOTE: Duplicate `name` values will cause `id` collisions.
     return {
