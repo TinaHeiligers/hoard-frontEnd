@@ -4,6 +4,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 View the component library [here](https://elastic.github.io/eui/#/)
 [Consuming elastic EUI guidelines](https://github.com/elastic/eui/blob/master/wiki/consuming.md)
 
+## Icons
+```
+<a href="https://pngtree.com/free-icons/simulated stocks  active">free simulated stocks  active icons</a> from pngtree.com
+```
 ## Available Scripts
 
 In the project directory, you can run:

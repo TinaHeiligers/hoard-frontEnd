@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-
 import { EuiIcon, EuiSideNav } from '@elastic/eui';
-import '@elastic/eui/dist/eui_theme_light.css';
 
 export class SideNav extends Component {
   constructor(props) {

@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { SideNav } from './SideNav';
+import '@elastic/eui/dist/eui_theme_light.css';
+import { AppLayout } from './AppLayout';
 
 function App() {
-  const [selectedItem, setItem] = useState('');
+
   return (
     <div className="App">
-      <SideNav setItem={setItem}/>
-      <h1>
-        {selectedItem}
-      </h1>
+      <AppLayout />
     </div>
   );
 }
