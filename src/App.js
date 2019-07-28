@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import { Route, Link, NavLink, Switch } from 'react-router-dom';
-import { EuiLink, EuiText } from '@elastic/eui';
+import { EuiLink } from '@elastic/eui';
 import { getRouterLinkProps } from './routerConversion';
 import './App.css';
 import '@elastic/eui/dist/eui_theme_light.css';
 // import { AppLayout } from './AppLayout';
-function Index({ ...routeProps }) {
+function HomeComponent({ ...routeProps }) {
   return <h1 style={{ fontWeight: 'bold' }}>Home</h1>;
 }
 
@@ -13,7 +13,7 @@ function About({ ...routeProps }) {
   return <h1 style={{ fontWeight: 'bold' }}>About</h1>;
 }
 
-function Users({ ...routeProps }) {
+function Versions({ ...routeProps }) {
   return <h1 style={{ fontWeight: 'bold' }}>Users</h1>;
 }
 
@@ -21,48 +21,20 @@ function NoMatch() {
   return <h1>404</h1>;
 }
 
-function Something({ ...routeProps }) {
-  return <h1>Something</h1>
+function Topics({ ...routeProps }) {
+  return <h1>Topics</h1>
 }
 
-const FadingRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={routeProps => (
-    <div>
-      <Component {...routeProps} />
-    </div>
-  )}>
-  </Route>
-)
-
-function OldSchool(props) {
-  return (
-    <Fragment>
-      <h1>OldSchool</h1>
-      <h3>Props:</h3>
-      <ul>
-        {Object.keys(props).map((prop, idx) => <li key={idx} style={{ listStyle: "square" }}>{prop}</li>)}
-      </ul>
-    </Fragment >
-  )
+function StocksLayout({ ...routeProps }) {
+  return <h1>StocksLayout</h1>
 }
 
-function OldSchoolMenuLink({ label, to, activeOnlyWhenExact }) {
-  return (
-    <Route
-      path={to}
-      exact={activeOnlyWhenExact}
-      children={({ match }) => (
-        <div className={match ? "selected" : ""}>
-          {match ? "---> " : ""}
-          <Link to={to}>{label}</Link>
-        </div>
-      )}
-    />
-  );
+function StockLayout({ ...routeProps }) {
+  return <h1>Single Stock Layout</h1>
 }
 
-function EuiLinkItem({ ...routeProps }) {
-  return <h1>EuiLinkItem</h1>
+function CompanyContainer({ ...routeProps }) {
+  return <h1>Single Company Layout</h1>
 }
 function App() {
   return (
@@ -70,42 +42,41 @@ function App() {
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <EuiLink {...getRouterLinkProps("/")}>Home</EuiLink>
           </li>
           <li>
-            <NavLink
-              to="/about/"
+            <EuiLink
               activeClassName="selected"
               aria-current="page"
-            >About</NavLink>
+              {...getRouterLinkProps("/about")}
+            >About</EuiLink>
           </li>
           <li>
-            <Link to="/users/">Users</Link>
+            <EuiLink {...getRouterLinkProps("/versions")} aria-current="page">Versions</EuiLink>
           </li>
           <li>
-            <Link to="/cool/">Cool</Link>
+            <EuiLink {...getRouterLinkProps("/topics")} aria-current="page">Cool</EuiLink>
           </li>
           <li>
-            <OldSchoolMenuLink to="/oldschool" label="OldSchool" activeOnlyWhenExact={true} />
-          </li>
-          <li>
-            <EuiLink {...getRouterLinkProps("/euilink/")}>
-              Eui Link Item
+            <EuiLink {...getRouterLinkProps("/stocks")} aria-current="page">
+              StocksLayout
             </EuiLink>
           </li>
+
         </ul>
       </nav>
       <hr />
       <hr />
       <Switch>
         {/* Using component to render, the component is returned directly with the router using React.createElement. If using an inline function to the component prop, a new component is rednered everytime instead of the existing one updating.*/}
-        <Route exact path="/" component={Index} />
-        <Route path="/about/" component={About} />
-        <Route path="/users/" component={Users} />
-        {/* FadingRoute returns a function that renders props Using a render function to render the component, will be superceeded by <Route component />. Does not create a bew React element */}
-        <FadingRoute path="/cool" component={Something} />
-        <Route path="/oldschool" component={OldSchool} />
-        <Route path="/euilink/" component={EuiLinkItem} />
+        <Route exact path="/" component={HomeComponent} />
+        <Route path="/about" component={About} />
+        <Route path="/versions" component={Versions} />
+        <Route path="/topics" component={Topics} />
+        <Route path="/stocks" component={StocksLayout} />
+        {/* The links to the specific stock and company will be declared in the relevant table/items. See old code as an example */}
+        <Route path="/stock/:stock_id" component={StockLayout} />
+        <Route path="/companies/:symbol" component={CompanyContainer} />
         <Route component={NoMatch} />
       </Switch>
     </div>
