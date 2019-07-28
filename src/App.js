@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { Route, Link, NavLink, Switch } from 'react-router-dom';
+import { EuiLink, EuiText } from '@elastic/eui';
+import { getRouterLinkProps } from './routerConversion';
 import './App.css';
 import '@elastic/eui/dist/eui_theme_light.css';
 // import { AppLayout } from './AppLayout';
@@ -38,7 +40,7 @@ function OldSchool(props) {
       <h1>OldSchool</h1>
       <h3>Props:</h3>
       <ul>
-        {Object.keys(props).map(prop => <li style={{ listStyle: "square" }}>{prop}</li>)}
+        {Object.keys(props).map((prop, idx) => <li key={idx} style={{ listStyle: "square" }}>{prop}</li>)}
       </ul>
     </Fragment >
   )
@@ -57,6 +59,10 @@ function OldSchoolMenuLink({ label, to, activeOnlyWhenExact }) {
       )}
     />
   );
+}
+
+function EuiLinkItem({ ...routeProps }) {
+  return <h1>EuiLinkItem</h1>
 }
 function App() {
   return (
@@ -82,6 +88,11 @@ function App() {
           <li>
             <OldSchoolMenuLink to="/oldschool" label="OldSchool" activeOnlyWhenExact={true} />
           </li>
+          <li>
+            <EuiLink {...getRouterLinkProps("/euilink/")}>
+              Eui Link Item
+            </EuiLink>
+          </li>
         </ul>
       </nav>
       <hr />
@@ -94,6 +105,7 @@ function App() {
         {/* FadingRoute returns a function that renders props Using a render function to render the component, will be superceeded by <Route component />. Does not create a bew React element */}
         <FadingRoute path="/cool" component={Something} />
         <Route path="/oldschool" component={OldSchool} />
+        <Route path="/euilink/" component={EuiLinkItem} />
         <Route component={NoMatch} />
       </Switch>
     </div>

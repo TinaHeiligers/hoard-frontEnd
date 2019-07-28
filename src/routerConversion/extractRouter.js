@@ -4,7 +4,8 @@ import { withRouter } from 'react-router-dom';
 export const extractRouter = onRouter => WrappedComponent =>
   withRouter(
     class extends Component {
-      componentDidMount() {
+      constructor(props) {
+        super(props);
         const { match, location, history } = this.props;
         const router = { route: { match, location }, history };
         onRouter(router);

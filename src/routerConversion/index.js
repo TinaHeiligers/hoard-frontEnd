@@ -1,9 +1,10 @@
 
 
 import { extractRouter } from './extractRouter';
-import { registerRouter } from './routingService';
+import { registerRouter, getRouterLinkProps } from './routingService';
 
 export {
   extractRouter,
-  registerRouter
+  registerRouter,
+  getRouterLinkProps
 };
