@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { EuiIcon, EuiSideNav } from '@elastic/eui';
+import { EuiLink } from '@elastic/eui';
+import { getRouterLinkProps } from './routerConversion';
 
-export class SideNav extends Component {
+import { EuiSideNav } from '@elastic/eui';
+
+export default class extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isSideNavOpenOnMobile: false,
-      selectedItemName: 'Lion stuff',
     };
   }
 
@@ -17,65 +19,25 @@ export class SideNav extends Component {
     });
   };
 
-  selectItem = name => {
-    this.setState({
-      selectedItemName: name,
-    });
-    this.showItemClicked(name);
-  };
-
-  showItemClicked = (name) => {
-    this.props.setItem(name)
-  }
-  createItem = (name, data = {}) => {
-    // NOTE: Duplicate `name` values will cause `id` collisions.
-    return {
-      ...data,
-      id: name,
-      name,
-      isSelected: this.state.selectedItemName === name,
-      onClick: () => this.selectItem(name),
-    };
-  };
+  renderItem = (item) => <EuiLink {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink>
 
   render() {
-    const sideNav = [
-      this.createItem('Elasticsearch', {
-        icon: <EuiIcon type="logoElasticsearch" />,
-        items: [
-          this.createItem('Data sources'),
-          this.createItem('Users'),
-          this.createItem('Roles'),
-          this.createItem('Watches'),
-          this.createItem(
-            'Extremely long title will become truncated when the browser is narrow enough'
-          ),
-        ],
-      }),
-      this.createItem('Kibana', {
-        icon: <EuiIcon type="logoKibana" />,
-        items: [
-          this.createItem('Advanced settings', {
-            items: [
-              this.createItem('General'),
-              this.createItem('Timelion', {
-                items: [
-                  this.createItem('Time stuff'),
-                  this.createItem('Lion stuff'),
-                ],
-              }),
-              this.createItem('Visualizations'),
-            ],
-          }),
-          this.createItem('Index Patterns'),
-          this.createItem('Saved Objects'),
-          this.createItem('Reporting'),
-        ],
-      }),
-      this.createItem('Logstash', {
-        icon: <EuiIcon type="logoLogstash" />,
-        items: [this.createItem('Pipeline viewer')],
-      }),
+    const items = [
+      {
+        name: 'Home',
+        id: 1,
+        renderItem: () => this.renderItem({ ref: '/', name: 'Home' })
+      },
+      {
+        name: 'About',
+        id: 2,
+        renderItem: () => this.renderItem({ ref: '/about', name: 'About' })
+      },
+      {
+        name: 'Stocks',
+        id: 3,
+        renderItem: () => this.renderItem({ ref: '/stocks', name: 'Stocks' })
+      }
     ];
 
     return (
@@ -83,9 +45,9 @@ export class SideNav extends Component {
         mobileTitle="Navigate within $APP_NAME"
         toggleOpenOnMobile={this.toggleOpenOnMobile}
         isOpenOnMobile={this.state.isSideNavOpenOnMobile}
-        items={sideNav}
-        style={{ width: 192 }}
+        items={items}
       />
     );
   }
 }
+
