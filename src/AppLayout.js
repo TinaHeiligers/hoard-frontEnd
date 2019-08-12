@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SideNav } from './SideNav';
+import SideNav from './SideNav';
+import '@elastic/eui/dist/eui_theme_light.css';
 
 import {
   EuiPage,
@@ -14,24 +15,38 @@ import {
   EuiTitle,
 } from '@elastic/eui';
 
-export function AppLayout() {
-  const [selectedItem, setItem] = useState('');
+
+function User(props) {
+  return <h1>Hello {props.match.params.username}!</h1>;
+}
+function PageTitle(title) {
+  return <h1 style={{ textTransform: 'uppercase' }}>{title.title}</h1>
+}
+function getTitle(pathString) {
+  switch (pathString) {
+    case '/':
+      return 'Home';
+    case '/about':
+      return 'About';
+    case '/stocks':
+      return 'All stocks';
+    default:
+      return 'Not found';
+  }
+}
+
+
+export function AppLayout({ routerProps, children }) {
   return (
     <EuiPage>
       <EuiPageSideBar>
-        <SideNav setItem={setItem} />
-        <h1>
-          {selectedItem}
-        </h1>
+        <SideNav />
       </EuiPageSideBar>
       <EuiPageBody>
         <EuiPageHeader>
           <EuiPageHeaderSection>
             <EuiTitle size="l">
-              {selectedItem !== '' ?
-                <h1>{selectedItem}</h1> :
-                <h1>Page Title</h1>
-              }
+              <PageTitle title={getTitle(routerProps.location.pathname)} />
             </EuiTitle>
           </EuiPageHeaderSection>
           <EuiPageHeaderSection>Page abilities</EuiPageHeaderSection>
@@ -40,14 +55,13 @@ export function AppLayout() {
           <EuiPageContentHeader>
             <EuiPageContentHeaderSection>
               <EuiTitle>
-                <h2>Content title</h2>
+                <h1>Page Content Header Section</h1>
               </EuiTitle>
             </EuiPageContentHeaderSection>
-            <EuiPageContentHeaderSection>
-              Content abilities
-          </EuiPageContentHeaderSection>
           </EuiPageContentHeader>
-          <EuiPageContentBody>Content body</EuiPageContentBody>
+          <EuiPageContentBody>
+            {children}
+          </EuiPageContentBody>
         </EuiPageContent>
       </EuiPageBody>
     </EuiPage>

@@ -19,7 +19,7 @@ export default class extends Component {
     });
   };
 
-  renderItem = (item) => <EuiLink {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink>
+  renderItem = (item) => <EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink>
 
   render() {
     const items = [
