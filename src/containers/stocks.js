@@ -36,39 +36,4 @@ const Stocks = () => {
   }
 }
 
-export default Stocks
-
-// class Stocks extends Component {
-//   componentDidMount() {
-//     this.props.loadStocksRequest();
-//   }
-
-//   render() {
-//     if (this.props.stocks || this.props.stocks.length) {
-//       return (
-//         <div>
-//           <p>We have {this.props.stocks.length} stocks.</p>
-//           {this.props.stocks.map((stock) =>
-//             <ol key={stock.id}>
-//               {Object.keys(stock).map((item, index) =>
-//                 <li key={index}>
-//                   <span>{item}: </span>
-//                   <span>{stock[item]}</span>
-//                 </li>
-//               )}
-//               <br />
-//             </ol>
-//           )}
-//         </div>
-//       )
-//     }
-//     return <p>Loading...</p>
-//   }
-// }
-// export default connect(
-//   state => ({
-//     stocks: state.stocks.allStocks || [],
-//     error: state.stocks.error || null,
-//   }),
-//   { loadStocksRequest }
-// )(Stocks);
+export default Stocks;

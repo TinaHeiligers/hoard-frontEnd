@@ -6,7 +6,6 @@ import Stocks from './containers/stocks';
 import {
   HomeComponent,
   About,
-  // StocksLayout,
   StockContent,
   CompanyContainer,
   NoMatch
