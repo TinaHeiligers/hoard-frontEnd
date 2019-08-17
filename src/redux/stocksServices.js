@@ -8,7 +8,6 @@ export const loadStocks = async () => {
   if (cors_enabled) {
     return await axios.get(`${baseUrl}/stocks`);
   } else {
-    console.log('data', stocks)
     return stocks;
   }
 };

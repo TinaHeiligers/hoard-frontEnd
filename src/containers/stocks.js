@@ -12,7 +12,6 @@ class Stocks extends Component {
   render() {
     return (
       <div>
-        <h3>Stocks Page Content</h3>
         <p>We have {this.props.stocks.length} stocks.</p>
       </div>
     )

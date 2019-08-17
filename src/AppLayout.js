@@ -49,13 +49,13 @@ export function AppLayout({ routerProps, children }) {
               <PageTitle title={getTitle(routerProps.location.pathname)} />
             </EuiTitle>
           </EuiPageHeaderSection>
-          <EuiPageHeaderSection>Page abilities</EuiPageHeaderSection>
+          <EuiPageHeaderSection>Extra Stuff for: {getTitle(routerProps.location.pathname)}</EuiPageHeaderSection>
         </EuiPageHeader>
         <EuiPageContent>
           <EuiPageContentHeader>
             <EuiPageContentHeaderSection>
-              <EuiTitle>
-                <h1>Page Content Header Section</h1>
+              <EuiTitle title={getTitle(routerProps.location.pathname)}>
+                <h1>Content for {getTitle(routerProps.location.pathname)}</h1>
               </EuiTitle>
             </EuiPageContentHeaderSection>
           </EuiPageContentHeader>

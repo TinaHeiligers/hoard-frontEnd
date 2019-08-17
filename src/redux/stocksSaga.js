@@ -9,7 +9,6 @@ export function* loadStocksRequestWatcher() {
 export function* loadStocksRequest() {
   try {
     const results = yield call(loadStocks);
-    console.log('results', results)
     yield put({
       type: stocksActions.LOAD_STOCKS_SUCCESS,
       stocks: results.data
