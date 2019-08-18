@@ -1,6 +1,5 @@
 # TO-DO's
-## Table Functioanlity:
-* add redux methods to handle toggling favorite and watched icon
+## Table Functionality:
 * add table pagination
 * add sparklines (consider https://github.com/borisyankov/react-sparklines if compatibile with current work)
 * implement table links
@@ -15,3 +14,7 @@
 ## Companies view:
 API: {{altBaseUrl}}/api/v1/companies/{stockSymbol}
 returns data of the form companyData.
+
+## Tests:
+* add tests for currently implemented Redux methods
+* install and use react-testing-library

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // eui components
 import {
   EuiBasicTable,
+  EuiButtonIcon,
   EuiLink,
   EuiIcon,
 } from '@elastic/eui';
@@ -14,16 +15,18 @@ import { getRouterLinkProps } from '../routerConversion';
 import stocksActions from '../redux/stocks/stocksActions';
 
 const loadStocksRequest = stocksActions.loadStocksRequest;
+const updateStockRequest = stocksActions.updateStockRequest;
 
 // React component
 const Stocks = () => {
+  const dispatch = useDispatch();
   const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
   const useFetching = (someFetchActionCreator, dispatch) => {
     useEffect(() => {
       dispatch(someFetchActionCreator());
     }, [dispatch, someFetchActionCreator])
   }
-  useFetching(loadStocksRequest, useDispatch());
+  useFetching(loadStocksRequest, dispatch);
 
   const error = useSelector(state => state.stocks.error)
 
@@ -33,7 +36,20 @@ const Stocks = () => {
     return stockOfInterest.id
   };
   // use a reducer to toggle heart and star
-
+  const toggleHeart = useCallback(
+    (stock) => {
+      const newStock = { ...stock, heart: stock.heart ? false : true };
+      dispatch(updateStockRequest(newStock))
+    },
+    [dispatch]
+  );
+  const toggleStar = useCallback(
+    (stock) => {
+      const newStock = { ...stock, star: stock.star ? false : true };
+      dispatch(updateStockRequest(newStock))
+    },
+    [dispatch]
+  );
   const columns = [
     {
       field: 'name',
@@ -52,7 +68,7 @@ const Stocks = () => {
       field: 'symbol',
       name: 'Symbol',
       truncateText: false,
-      render: item => renderStockLink({ ref: `/stocks/${getItemIdFromSymbol(item)}`, name: `${item}` }),
+      render: symbol => renderStockLink({ ref: `/stocks/${getItemIdFromSymbol(symbol)}`, name: `${symbol}` }),
       mobileOptions: {
         show: false,
       },
@@ -65,21 +81,33 @@ const Stocks = () => {
     {
       field: 'heart',
       name: 'Liked',
-      render: heart => {
-        const color = heart ? 'danger' : 'darkgray';
-        return <EuiIcon color={color} type="heart" />
+      dataType: 'boolean',
+      render: (heart, item) => {
+        const color = heart ? 'danger' : 'subdued';
+        return <EuiButtonIcon
+          color={color}
+          item={item}
+          onClick={() => toggleHeart(item)}
+          iconType="heart"
+          aria-label="Heart" />
       },
     },
     {
       field: 'star',
       name: 'Watched',
-      render: star => {
-        const color = star ? 'goldenrod' : 'darkgray';
-        return <EuiIcon color={color} type="starEmptySpace" />;
+      dataType: 'boolean',
+      render: (star, item) => {
+        const color = star ? 'warning' : 'subdued';
+        return <EuiButtonIcon
+          color={color}
+          onClick={() => toggleStar(item)}
+          iconType="starEmptySpace"
+          aria-label="Star" />
       },
     },
   ];
-  const items = stocks.filter((stock, index) => index < 10);
+  // const items = stocks.filter((stock, index) => index < 10); // replace with pagination
+  const items = stocks;
 
   const getRowProps = item => {
     const { id } = item;

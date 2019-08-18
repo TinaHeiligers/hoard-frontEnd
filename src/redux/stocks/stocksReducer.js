@@ -2,6 +2,7 @@ import stocksActions from './stocksActions';
 
 export const initialState = {
   allStocks: [],
+  selectedStock: null,
   error: null
 };
 
@@ -19,6 +20,19 @@ export default function stocksReducer(currentState = initialState, action) {
       const newState = {
         ...currentState,
         error: action.error
+      };
+      return newState;
+    }
+    case stocksActions.UPDATE_STOCK_SUCCESS: {
+      const updatedStocks = currentState.allStocks.map((stock, idx) => {
+        if (stock.id === action.updatedStock.id) {
+          stock = action.updatedStock
+        };
+        return stock;
+      });
+      const newState = {
+        ...currentState,
+        allStocks: updatedStocks
       };
       return newState;
     }

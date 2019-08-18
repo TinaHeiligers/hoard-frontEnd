@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import stocksActions from './stocksActions';
-import { loadStocks } from './stocksServices';
+import { loadStocks, updateStock } from './stocksServices';
 
 export function* loadStocksRequestWatcher() {
   yield takeEvery(stocksActions.LOAD_STOCKS_REQUEST, loadStocksRequest);
@@ -9,7 +9,6 @@ export function* loadStocksRequestWatcher() {
 export function* loadStocksRequest() {
   try {
     const results = yield call(loadStocks);
-    console.log('did we get results from the server?', results)
     yield put({
       type: stocksActions.LOAD_STOCKS_SUCCESS,
       stocks: results.data
@@ -19,8 +18,28 @@ export function* loadStocksRequest() {
   }
 }
 
+export function* updateStockRequestWatcher() {
+  yield takeEvery(stocksActions.UPDATE_STOCK_REQUEST, updateStockRequest);
+}
+
+export function* updateStockRequest(action) {
+  try {
+    const result = yield call(updateStock, action.stock);
+    yield put({
+      type: stocksActions.UPDATE_STOCK_SUCCESS,
+      updatedStock: result.data
+    })
+  } catch (err) {
+    yield put({
+      type: stocksActions.STOCKS_ERROR,
+      error: 'Could not update stock'
+    })
+  }
+}
+
 export default function* stocksSaga() {
   yield all([
     fork(loadStocksRequestWatcher),
+    fork(updateStockRequestWatcher)
   ]);
 }
