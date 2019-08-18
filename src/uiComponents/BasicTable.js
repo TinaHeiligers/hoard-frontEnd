@@ -1,14 +1,10 @@
 import React from 'react';
-// eui helper services
-import { formatDate } from '@elastic/eui/lib/services/format';
 // eui components
 import {
   EuiBasicTable,
   EuiLink,
-  EuiHealth,
   EuiIcon,
 } from '@elastic/eui';
-
 
 // routing items
 import { getRouterLinkProps } from '../routerConversion';
@@ -19,6 +15,10 @@ import stocks from '../redux/stocksData';
 const stocksData = stocks.data;
 // router helper method
 const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
+const getItemIdFromSymbol = (symbol) => {
+  const stockOfInterest = stocksData.find(stock => stock.symbol === symbol);
+  return stockOfInterest.id
+};
 export const Table = () => {
   const columns = [
     {
@@ -38,7 +38,7 @@ export const Table = () => {
       field: 'symbol',
       name: 'Symbol',
       truncateText: false,
-      render: item => renderStockLink({ ref: `#`, name: `${item}` }),
+      render: item => renderStockLink({ ref: `/stocks/${getItemIdFromSymbol(item)}`, name: `${item}` }),
       mobileOptions: {
         show: false,
       },

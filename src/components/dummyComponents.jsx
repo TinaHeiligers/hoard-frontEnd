@@ -9,7 +9,6 @@ export function About({ ...routeProps }) {
   return (
     <div>
       <h1>About Page Content</h1>
-      <Table />
     </div>
   );
 };
