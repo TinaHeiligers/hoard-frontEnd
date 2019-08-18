@@ -6,6 +6,7 @@ import {
   EuiBasicTable,
   EuiLink,
   EuiHealth,
+  EuiIcon,
 } from '@elastic/eui';
 
 
@@ -15,51 +16,6 @@ import { getRouterLinkProps } from '../routerConversion';
 // data
 import stocks from '../redux/stocksData';
 
-// Table:
-// Eui Table Data
-// const stock1 = {
-//   id: '1',
-//   firstName: 'john',
-//   lastName: 'doe',
-//   github: 'johndoe',
-//   dateOfBirth: Date.now(),
-//   nationality: 'NL',
-//   online: true,
-// }
-// const stock2 = {
-//   id: '2',
-//   firstName: 'precious',
-//   lastName: 'zizile',
-//   github: 'preciouszizile',
-//   dateOfBirth: Date.now(),
-//   nationality: 'SA',
-//   online: false,
-// }
-// const stock3 = {
-//   id: '3',
-//   firstName: 'mary',
-//   lastName: 'jane',
-//   github: 'maryjane',
-//   dateOfBirth: Date.now(),
-//   nationality: 'US',
-//   online: false,
-// }
-// const country1 = {
-//   code: 'NL',
-//   name: 'Netherlands',
-//   flag: '🇳🇱',
-// }
-// const country2 = {
-//   code: 'SA',
-//   name: 'Republic of South Africa',
-//   flag: '🇿🇦',
-// }
-// const country3 = {
-//   code: 'US',
-//   name: 'United States of America',
-//   flag: '🇺🇲',
-// }
-// const countries = [country1, country2, country3];
 const stocksData = stocks.data;
 // router helper method
 const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
@@ -89,31 +45,23 @@ export const Table = () => {
     },
     {
       field: 'annualDividends',
-      dataType: 'number',
       name: 'Annual Dividends',
-    },
-    {
-      field: 'updatedAt',
-      name: 'Updated at',
-      dataType: 'date',
-      render: date => formatDate(date, 'dobLong'),
+      render: annualDividends => annualDividends ? annualDividends : '---'
     },
     {
       field: 'heart',
       name: 'Liked',
       render: heart => {
-        const color = heart ? 'success' : 'danger';
-        const label = heart ? 'Liked' : 'Not liked';
-        return <EuiHealth color={color}>{label}</EuiHealth>;
+        const color = heart ? 'danger' : 'darkgray';
+        return <EuiIcon color={color} type="heart" />
       },
     },
     {
       field: 'star',
       name: 'Watched',
       render: star => {
-        const color = star ? 'success' : 'danger';
-        const label = star ? 'Watched' : 'Not watched';
-        return <EuiHealth color={color}>{label}</EuiHealth>;
+        const color = star ? 'goldenrod' : 'darkgray';
+        return <EuiIcon color={color} type="starEmptySpace" />;
       },
     },
   ];
