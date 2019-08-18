@@ -12,64 +12,66 @@ import {
 // routing items
 import { getRouterLinkProps } from '../routerConversion';
 
+// data
+import stocks from '../redux/stocksData';
+
 // Table:
 // Eui Table Data
-const user1 = {
-  id: '1',
-  firstName: 'john',
-  lastName: 'doe',
-  github: 'johndoe',
-  dateOfBirth: Date.now(),
-  nationality: 'NL',
-  online: true,
-}
-const user2 = {
-  id: '2',
-  firstName: 'precious',
-  lastName: 'zizile',
-  github: 'preciouszizile',
-  dateOfBirth: Date.now(),
-  nationality: 'SA',
-  online: false,
-}
-const user3 = {
-  id: '3',
-  firstName: 'mary',
-  lastName: 'jane',
-  github: 'maryjane',
-  dateOfBirth: Date.now(),
-  nationality: 'US',
-  online: false,
-}
-const country1 = {
-  code: 'NL',
-  name: 'Netherlands',
-  flag: '🇳🇱',
-}
-const country2 = {
-  code: 'SA',
-  name: 'Republic of South Africa',
-  flag: '🇿🇦',
-}
-const country3 = {
-  code: 'US',
-  name: 'United States of America',
-  flag: '🇺🇲',
-}
-const users = [user1, user2, user3];
-const countries = [country1, country2, country3];
-
+// const stock1 = {
+//   id: '1',
+//   firstName: 'john',
+//   lastName: 'doe',
+//   github: 'johndoe',
+//   dateOfBirth: Date.now(),
+//   nationality: 'NL',
+//   online: true,
+// }
+// const stock2 = {
+//   id: '2',
+//   firstName: 'precious',
+//   lastName: 'zizile',
+//   github: 'preciouszizile',
+//   dateOfBirth: Date.now(),
+//   nationality: 'SA',
+//   online: false,
+// }
+// const stock3 = {
+//   id: '3',
+//   firstName: 'mary',
+//   lastName: 'jane',
+//   github: 'maryjane',
+//   dateOfBirth: Date.now(),
+//   nationality: 'US',
+//   online: false,
+// }
+// const country1 = {
+//   code: 'NL',
+//   name: 'Netherlands',
+//   flag: '🇳🇱',
+// }
+// const country2 = {
+//   code: 'SA',
+//   name: 'Republic of South Africa',
+//   flag: '🇿🇦',
+// }
+// const country3 = {
+//   code: 'US',
+//   name: 'United States of America',
+//   flag: '🇺🇲',
+// }
+// const countries = [country1, country2, country3];
+const stocksData = stocks.data;
 // router helper method
 const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
 export const Table = () => {
   const columns = [
     {
-      field: 'firstName',
-      name: 'First Name',
+      field: 'name',
+      name: 'Company Name',
       sortable: true,
-      'data-test-subj': 'firstNameCell',
+      'data-test-subj': 'nameCell',
       mobileOptions: {
-        render: item => renderStockLink({ ref: `/stock/${item.id}`, name: `${item.lastName}` }),
+        render: item => renderStockLink({ ref: `/stocks/${item.id}`, name: `${item.name}` }),
         header: false,
         truncateText: false,
         enlarge: true,
@@ -77,44 +79,45 @@ export const Table = () => {
       },
     },
     {
-      field: 'lastName',
-      name: 'Last Name',
+      field: 'symbol',
+      name: 'Symbol',
       truncateText: false,
-      render: name => renderStockLink({ ref: `#`, name: `${name}` }),
+      render: item => renderStockLink({ ref: `#`, name: `${item}` }),
       mobileOptions: {
         show: false,
       },
     },
     {
-      field: 'github',
-      name: 'Github',
+      field: 'annualDividends',
+      dataType: 'number',
+      name: 'Annual Dividends',
     },
     {
-      field: 'dateOfBirth',
-      name: 'Date of Birth',
+      field: 'updatedAt',
+      name: 'Updated at',
       dataType: 'date',
       render: date => formatDate(date, 'dobLong'),
     },
     {
-      field: 'nationality',
-      name: 'Nationality',
-      render: countryCode => {
-        const country = countries.find((country) => country.code === countryCode)
-        return `${country.flag} ${country.name}`;
+      field: 'heart',
+      name: 'Liked',
+      render: heart => {
+        const color = heart ? 'success' : 'danger';
+        const label = heart ? 'Liked' : 'Not liked';
+        return <EuiHealth color={color}>{label}</EuiHealth>;
       },
     },
     {
-      field: 'online',
-      name: 'Online',
-      dataType: 'boolean',
-      render: online => {
-        const color = online ? 'success' : 'danger';
-        const label = online ? 'Online' : 'Offline';
+      field: 'star',
+      name: 'Watched',
+      render: star => {
+        const color = star ? 'success' : 'danger';
+        const label = star ? 'Watched' : 'Not watched';
         return <EuiHealth color={color}>{label}</EuiHealth>;
       },
     },
   ];
-  const items = users.filter((user, index) => index < 10);
+  const items = stocksData.filter((stock, index) => index < 10);
 
   const getRowProps = item => {
     const { id } = item;
