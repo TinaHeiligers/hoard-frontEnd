@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+// redux items
 import stocksActions from '../redux/stocksActions';
 
 const loadStocksRequest = stocksActions.loadStocksRequest;
 
+
+// React component
 const Stocks = () => {
-  const stocks = useSelector(state => state.stocks.allStocks);
+  const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
   const useFetching = (someFetchActionCreator, dispatch) => {
     useEffect(() => {
       dispatch(someFetchActionCreator());
@@ -35,5 +39,5 @@ const Stocks = () => {
     return (<div>Loading...</div>)
   }
 }
-
 export default Stocks;
+

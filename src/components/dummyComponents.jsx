@@ -1,11 +1,17 @@
 import React from 'react';
+import { Table } from '../uiComponents/BasicTable';
 
 export function HomeComponent({ ...routeProps }) {
   return <div>Home Page Content</div>;
 };
 
 export function About({ ...routeProps }) {
-  return <div>About Page Content</div>;
+  return (
+    <div>
+      <h1>About Page Content</h1>
+      <Table />
+    </div>
+  );
 };
 
 export function NoMatch() {
