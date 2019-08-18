@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table } from '../uiComponents/BasicTable';
 
 export function HomeComponent({ ...routeProps }) {
   return <div>Home Page Content</div>;

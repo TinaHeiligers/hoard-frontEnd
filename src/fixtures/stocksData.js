@@ -224,3 +224,21 @@ export const newStock = {
   updatedAt: '2019-02-01T18:22:05.279Z',
   url: 'http://localhost:5000/api/v1/stocks/4'
 };
+// return value for GET {baseUrl}/api/v1/stock/{stock_id} and POST
+export const singularStock = {
+  id: 23,
+  symbol: "GCI",
+  name: "Gannett Co. Inc.",
+  annualDividends: 4,
+  heart: false,
+  star: null,
+  exchange: null,
+  website: null,
+  ceo: null,
+  sector: null,
+  industry: null,
+  employees: null,
+  createdAt: "2019-02-03T23:57:07.967Z",
+  updatedAt: "2019-02-10T23:54:45.393Z",
+  url: "http://localhost:3090/api/v1/stocks/23"
+};
