@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SideNav from './SideNav';
 import '@elastic/eui/dist/eui_theme_light.css';
 
@@ -15,13 +15,10 @@ import {
   EuiTitle,
 } from '@elastic/eui';
 
-
-function User(props) {
-  return <h1>Hello {props.match.params.username}!</h1>;
-}
 function PageTitle(title) {
   return <h1 style={{ textTransform: 'uppercase' }}>{title.title}</h1>
 }
+
 function getTitle(pathString) {
   switch (pathString) {
     case '/':

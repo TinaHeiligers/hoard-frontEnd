@@ -5,7 +5,6 @@ import {
   EuiBasicTable,
   EuiButtonIcon,
   EuiLink,
-  EuiIcon,
 } from '@elastic/eui';
 
 // routing items
@@ -20,6 +19,7 @@ const updateStockRequest = stocksActions.updateStockRequest;
 // React component
 const Stocks = () => {
   const dispatch = useDispatch();
+  // stocks
   const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
   const useFetching = (someFetchActionCreator, dispatch) => {
     useEffect(() => {
@@ -27,15 +27,17 @@ const Stocks = () => {
     }, [dispatch, someFetchActionCreator])
   }
   useFetching(loadStocksRequest, dispatch);
-
+  // errors
   const error = useSelector(state => state.stocks.error)
 
   const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
+
+  // helper method
   const getItemIdFromSymbol = (symbol) => {
     const stockOfInterest = stocks.find(stock => stock.symbol === symbol);
     return stockOfInterest.id
   };
-  // use a reducer to toggle heart and star
+  // reducer calls
   const toggleHeart = useCallback(
     (stock) => {
       const newStock = { ...stock, heart: stock.heart ? false : true };
