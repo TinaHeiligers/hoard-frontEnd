@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // eui components
 import {
@@ -18,6 +18,9 @@ const updateStockRequest = stocksActions.updateStockRequest;
 
 // React component
 const Stocks = () => {
+  // pagination
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const dispatch = useDispatch();
   // stocks
   const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
@@ -52,6 +55,11 @@ const Stocks = () => {
     },
     [dispatch]
   );
+  const onTableChange = ({ page = {} }) => {
+    const { index: pageIndex, size: pageSize } = page;
+    setPageIndex(pageIndex);
+    setPageSize(pageSize);
+  };
   const columns = [
     {
       field: 'name',
@@ -108,8 +116,7 @@ const Stocks = () => {
       },
     },
   ];
-  // const items = stocks.filter((stock, index) => index < 10); // replace with pagination
-  const items = stocks;
+  const items = stocks.slice(pageIndex, Math.floor(pageIndex + pageSize)); // for pagination
 
   const getRowProps = item => {
     const { id } = item;
@@ -129,16 +136,28 @@ const Stocks = () => {
     };
   };
 
+  const pagination = {
+    pageIndex,
+    pageSize,
+    totalItemCount: stocks.length,
+    pageSizeOptions: [5, 10, 15],
+    hidePerPageOptions: false,
+  };
+
   if (error) {
     return <h1>We have an error: {JSON.stringify(error)}</h1>
   } else if (stocks && stocks.length) {
     return (
-      <EuiBasicTable
-        items={items}
-        columns={columns}
-        rowProps={getRowProps}
-        cellProps={getCellProps}
-      />)
+      <Fragment>
+        <EuiBasicTable
+          items={items}
+          columns={columns}
+          rowProps={getRowProps}
+          cellProps={getCellProps}
+          pagination={pagination}
+          onChange={onTableChange}
+        />
+      </Fragment>)
   } else {
     return (<div>Loading...</div>)
   }
