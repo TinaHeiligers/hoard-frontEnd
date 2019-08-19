@@ -1,6 +1,5 @@
 # TO-DO's
 ## Table Functionality:
-* add table pagination
 * add sparklines (consider https://github.com/borisyankov/react-sparklines if compatibile with current work)
 * implement table links
 ## Stocks view
