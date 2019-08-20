@@ -15,5 +15,5 @@ API: {{altBaseUrl}}/api/v1/companies/{stockSymbol}
 returns data of the form companyData.
 
 ## Tests:
-* add tests for currently implemented Redux methods
+* try to figure out why husky git hooks aren't working
 * install and use react-testing-library

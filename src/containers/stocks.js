@@ -35,26 +35,18 @@ const Stocks = () => {
 
   const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
 
-  // helper method
+  // plain Js helper method
   const getItemIdFromSymbol = (symbol) => {
     const stockOfInterest = stocks.find(stock => stock.symbol === symbol);
     return stockOfInterest.id
   };
   // reducer calls
-  const toggleHeart = useCallback(
-    (stock) => {
-      const newStock = { ...stock, heart: stock.heart ? false : true };
-      dispatch(updateStockRequest(newStock))
-    },
-    [dispatch]
-  );
-  const toggleStar = useCallback(
-    (stock) => {
-      const newStock = { ...stock, star: stock.star ? false : true };
-      dispatch(updateStockRequest(newStock))
-    },
-    [dispatch]
-  );
+  const toggleFlag = (stock, flag) => {
+    const updatedHeart = flag === 'heart' ? !stock.heart : stock.heart;
+    const updatedStar = flag === 'star' ? !stock.star : stock.star;
+    const newStock = { ...stock, heart: updatedHeart, star: updatedStar };
+    dispatch(updateStockRequest(newStock))
+  }
   const onTableChange = ({ page = {} }) => {
     const { index: pageIndex, size: pageSize } = page;
     setPageIndex(pageIndex);
@@ -97,7 +89,7 @@ const Stocks = () => {
         return <EuiButtonIcon
           color={color}
           item={item}
-          onClick={() => toggleHeart(item)}
+          onClick={() => toggleFlag(item, 'heart')}
           iconType="heart"
           aria-label="Heart" />
       },
@@ -110,7 +102,7 @@ const Stocks = () => {
         const color = star ? 'warning' : 'subdued';
         return <EuiButtonIcon
           color={color}
-          onClick={() => toggleStar(item)}
+          onClick={() => toggleFlag(item, 'star')}
           iconType="starEmptySpace"
           aria-label="Star" />
       },
