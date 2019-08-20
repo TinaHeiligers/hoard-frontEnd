@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // eui components
 import {
@@ -21,32 +21,33 @@ const Stocks = () => {
   // pagination
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const dispatch = useDispatch();
-  // stocks
+
+  // store states
   const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
+  const error = useSelector(state => state.stocks.error)
+
+  // store/API interaction methods
+  const dispatch = useDispatch();
   const useFetching = (someFetchActionCreator, dispatch) => {
     useEffect(() => {
       dispatch(someFetchActionCreator());
     }, [dispatch, someFetchActionCreator])
   }
   useFetching(loadStocksRequest, dispatch);
-  // errors
-  const error = useSelector(state => state.stocks.error)
-
-  const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
-
-  // plain Js helper method
-  const getItemIdFromSymbol = (symbol) => {
-    const stockOfInterest = stocks.find(stock => stock.symbol === symbol);
-    return stockOfInterest.id
-  };
-  // reducer calls
   const toggleFlag = (stock, flag) => {
     const updatedHeart = flag === 'heart' ? !stock.heart : stock.heart;
     const updatedStar = flag === 'star' ? !stock.star : stock.star;
     const newStock = { ...stock, heart: updatedHeart, star: updatedStar };
-    dispatch(updateStockRequest(newStock))
+    dispatch(updateStockRequest(newStock)) // already using useDispatch() from react-redux so this is fine.
   }
+
+  // general methods
+  const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
+  const getItemIdFromSymbol = (symbol) => {
+    const stockOfInterest = stocks.find(stock => stock.symbol === symbol);
+    return stockOfInterest.id
+  };
+  // Ui change methods
   const onTableChange = ({ page = {} }) => {
     const { index: pageIndex, size: pageSize } = page;
     setPageIndex(pageIndex);
