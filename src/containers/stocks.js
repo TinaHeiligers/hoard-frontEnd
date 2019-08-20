@@ -7,6 +7,7 @@ import {
   EuiLink,
 } from '@elastic/eui';
 
+import { compareValues } from '../utilities/generalMethods';
 // routing items
 import { getRouterLinkProps } from '../routerConversion';
 
@@ -21,6 +22,8 @@ const Stocks = () => {
   // pagination
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [sortField, setSortField] = useState('symbol');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   // store states
   const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
@@ -48,10 +51,13 @@ const Stocks = () => {
     return stockOfInterest.id
   };
   // Ui change methods
-  const onTableChange = ({ page = {} }) => {
+  const onTableChange = ({ page = {}, sort = {} }) => {
     const { index: pageIndex, size: pageSize } = page;
+    const { field: sortField, direction: sortDirection } = sort;
     setPageIndex(pageIndex);
     setPageSize(pageSize);
+    setSortField(sortField);
+    setSortDirection(sortDirection);
   };
   const columns = [
     {
@@ -70,6 +76,7 @@ const Stocks = () => {
     {
       field: 'symbol',
       name: 'Symbol',
+      sortable: true,
       truncateText: false,
       render: symbol => renderStockLink({ ref: `/stocks/${getItemIdFromSymbol(symbol)}`, name: `${symbol}` }),
       mobileOptions: {
@@ -79,11 +86,13 @@ const Stocks = () => {
     {
       field: 'annualDividends',
       name: 'Annual Dividends',
+      sortable: true,
       render: annualDividends => annualDividends ? annualDividends : '---'
     },
     {
       field: 'heart',
       name: 'Liked',
+      sortable: true,
       dataType: 'boolean',
       render: (heart, item) => {
         const color = heart ? 'danger' : 'subdued';
@@ -98,6 +107,7 @@ const Stocks = () => {
     {
       field: 'star',
       name: 'Watched',
+      sortable: true,
       dataType: 'boolean',
       render: (star, item) => {
         const color = star ? 'warning' : 'subdued';
@@ -109,7 +119,7 @@ const Stocks = () => {
       },
     },
   ];
-  const items = stocks.slice(pageIndex, Math.floor(pageIndex + pageSize)); // for pagination
+
 
   const getRowProps = item => {
     const { id } = item;
@@ -137,6 +147,17 @@ const Stocks = () => {
     hidePerPageOptions: false,
   };
 
+  const sorting = {
+    sort: {
+      field: sortField,
+      direction: sortDirection,
+    }
+  }
+
+  const sortedStocks = stocks.sort(compareValues(sortField, sortDirection));
+  const items = sortedStocks.slice(pageIndex, Math.floor(pageIndex + pageSize)); // for pagination and sorting
+
+
   if (error) {
     return <h1>We have an error: {JSON.stringify(error)}</h1>
   } else if (stocks && stocks.length) {
@@ -148,6 +169,7 @@ const Stocks = () => {
           rowProps={getRowProps}
           cellProps={getCellProps}
           pagination={pagination}
+          sorting={sorting}
           onChange={onTableChange}
         />
       </Fragment>)
