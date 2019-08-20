@@ -59,6 +59,28 @@ const Stocks = () => {
     setSortField(sortField);
     setSortDirection(sortDirection);
   };
+
+  const sortedStocks = stocks.sort(compareValues(sortField, sortDirection));
+  const items = sortedStocks.slice(pageIndex, Math.floor(pageIndex + pageSize)); // for pagination and sorting
+
+  const getRowProps = item => {
+    const { id } = item;
+    return {
+      'data-test-subj': `row-${id}`,
+      className: 'customRowClass',
+      onClick: () => console.log(`Clicked row ${id}`),
+    };
+  };
+  const getCellProps = (item, column) => {
+    const { id } = item;
+    const { field } = column;
+    return {
+      className: 'customCellClass',
+      'data-test-subj': `cell-${id}-${field}`,
+      textOnly: true,
+    };
+  };
+
   const columns = [
     {
       field: 'name',
@@ -120,25 +142,6 @@ const Stocks = () => {
     },
   ];
 
-
-  const getRowProps = item => {
-    const { id } = item;
-    return {
-      'data-test-subj': `row-${id}`,
-      className: 'customRowClass',
-      onClick: () => console.log(`Clicked row ${id}`),
-    };
-  };
-  const getCellProps = (item, column) => {
-    const { id } = item;
-    const { field } = column;
-    return {
-      className: 'customCellClass',
-      'data-test-subj': `cell-${id}-${field}`,
-      textOnly: true,
-    };
-  };
-
   const pagination = {
     pageIndex,
     pageSize,
@@ -153,10 +156,6 @@ const Stocks = () => {
       direction: sortDirection,
     }
   }
-
-  const sortedStocks = stocks.sort(compareValues(sortField, sortDirection));
-  const items = sortedStocks.slice(pageIndex, Math.floor(pageIndex + pageSize)); // for pagination and sorting
-
 
   if (error) {
     return <h1>We have an error: {JSON.stringify(error)}</h1>
