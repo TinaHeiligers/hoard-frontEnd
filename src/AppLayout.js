@@ -46,7 +46,10 @@ export function AppLayout({ routerProps, children }) {
               <PageTitle title={getTitle(routerProps.location.pathname)} />
             </EuiTitle>
           </EuiPageHeaderSection>
-          <EuiPageHeaderSection>Extra Stuff for: {getTitle(routerProps.location.pathname)}</EuiPageHeaderSection>
+          {getTitle(routerProps.location.pathname) === 'Not found'
+            ? <EuiPageHeaderSection>Extra Stuff for: {getTitle(routerProps.location.pathname)} and the content will be replaced/updated</EuiPageHeaderSection>
+            : <EuiPageHeaderSection>Extra Stuff for: {getTitle(routerProps.location.pathname)}</EuiPageHeaderSection>
+          }
         </EuiPageHeader>
         <EuiPageContent>
           <EuiPageContentHeader>
@@ -56,9 +59,11 @@ export function AppLayout({ routerProps, children }) {
               </EuiTitle>
             </EuiPageContentHeaderSection>
           </EuiPageContentHeader>
-          <EuiPageContentBody>
-            {children}
-          </EuiPageContentBody>
+          {getTitle(routerProps.location.pathname) !== 'Not found' &&
+            <EuiPageContentBody>
+              {children}
+            </EuiPageContentBody>
+          }
         </EuiPageContent>
       </EuiPageBody>
     </EuiPage>
