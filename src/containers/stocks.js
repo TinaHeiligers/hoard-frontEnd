@@ -37,6 +37,7 @@ const Stocks = () => {
     }, [dispatch, someFetchActionCreator])
   }
   useFetching(loadStocksRequest, dispatch);
+
   const toggleFlag = (stock, flag) => {
     const updatedHeart = flag === 'heart' ? !stock.heart : stock.heart;
     const updatedStar = flag === 'star' ? !stock.star : stock.star;
@@ -64,11 +65,11 @@ const Stocks = () => {
   const items = sortedStocks.slice(pageIndex, Math.floor(pageIndex + pageSize)); // for pagination and sorting
 
   const getRowProps = item => {
-    const { id } = item;
+    const { id, symbol } = item;
     return {
       'data-test-subj': `row-${id}`,
       className: 'customRowClass',
-      onClick: () => console.log(`Clicked row ${id}`),
+      onClick: () => console.log(`Clicked row ${id} with symbol ${symbol}`),
     };
   };
   const getCellProps = (item, column) => {
@@ -78,6 +79,7 @@ const Stocks = () => {
       className: 'customCellClass',
       'data-test-subj': `cell-${id}-${field}`,
       textOnly: true,
+      onClick: () => console.log(`Clicked row ${id}`)
     };
   };
 
@@ -139,7 +141,7 @@ const Stocks = () => {
           iconType="starEmptySpace"
           aria-label="Star" />
       },
-    },
+    }
   ];
 
   const pagination = {

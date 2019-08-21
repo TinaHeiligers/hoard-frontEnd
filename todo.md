@@ -1,7 +1,7 @@
 # TO-DO's
 ## Table Functionality:
-* implement deletion of single stock only
-* implement selection of multiple stocks
+* implement selection of multiple stocks -> use selection in Eui
+* implement deletion of single stock only -> use a custom action in Eui Table.
 * implement filtering to table
 * implement adding a new item by Symbol
 * add sparklines (consider https://github.com/borisyankov/react-sparklines if compatibile with current work)

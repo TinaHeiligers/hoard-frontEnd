@@ -2,13 +2,13 @@ import stocks from '../../fixtures/stocksData';
 import stocksActions from './stocksActions.js';
 
 describe('stocks action creators -> stocksActions', () => {
-  it('gets stocks on loadStocksRequest', () => {
+  it('puts LOAD_STOCKS_REQUEST on loadStocksRequest', () => {
     const testLoadStocksRequest = stocksActions.loadStocksRequest();
     expect(testLoadStocksRequest).toEqual({
       type: stocksActions.LOAD_STOCKS_REQUEST
     });
   });
-  it('returns stocks on loadStocksSuccess', () => {
+  it('puts LOAD_STOCKS_SUCCESS with a payload of stocks on loadStocksSuccess', () => {
     const testStocks = stocks.data;
     const testLoadStocksSuccess = stocksActions.loadStocksSuccess(testStocks);
     expect(testLoadStocksSuccess).toEqual({
@@ -16,7 +16,7 @@ describe('stocks action creators -> stocksActions', () => {
       stocks: testStocks
     });
   });
-  it('returns and error message on stocksError', () => {
+  it('puts STOCKS_ERROR with an error message on stocksError', () => {
     const testError = { message: 'Could not load stocks' };
     const testLoadStocksError = stocksActions.stocksError(testError);
     expect(testLoadStocksError).toEqual({
@@ -24,7 +24,7 @@ describe('stocks action creators -> stocksActions', () => {
       error: testError.message
     });
   });
-  it('updates a stock on updateStockRequest', () => {
+  it('puts UPDATE_STOCKS_REQUEST with the stock item on updateStockRequest', () => {
     const testUpdatedStock = { ...stocks.data[0], heart: true };
     const testUpdateStock = stocksActions.updateStockRequest(testUpdatedStock);
     expect(testUpdateStock).toEqual({
@@ -32,12 +32,12 @@ describe('stocks action creators -> stocksActions', () => {
       stock: testUpdatedStock
     })
   });
-  it('updates a stock on updateStockSuccess', () => {
+  it('puts UPDATE_STOCK_SUCCESS with the updated stock on updateStockSuccess', () => {
     const testUpdatedStock = { ...stocks.data[0], heart: true };
     const testUpdatedStockSuccess = stocksActions.updateStockSuccess(testUpdatedStock);
     expect(testUpdatedStockSuccess).toEqual({
       type: stocksActions.UPDATE_STOCK_SUCCESS,
       updatedStock: testUpdatedStock
-    })
+    });
   });
 });
