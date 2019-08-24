@@ -44,8 +44,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test",
-      "pre-push": "yarn test"
+      "pre-push": "react-scripts test --watchAll=false"
     }
   }
 }
