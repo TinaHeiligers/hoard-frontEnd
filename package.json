@@ -39,5 +39,12 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "husky": "^3.0.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "react-scripts test --watchAll=false"
+    }
+  }
 }
