@@ -1,36 +1,26 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// eui components
 import {
   EuiBasicTable,
   EuiButtonIcon,
   EuiLink,
 } from '@elastic/eui';
-
 import { compareValues } from '../utilities/generalMethods';
-// routing items
 import { getRouterLinkProps } from '../routerConversion';
-
-// redux items
 import stocksActions from '../redux/stocks/stocksActions';
-
 const loadStocksRequest = stocksActions.loadStocksRequest;
 const updateStockRequest = stocksActions.updateStockRequest;
 
-// React component
 const Stocks = () => {
-  // pagination
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortField, setSortField] = useState('symbol');
   const [sortDirection, setSortDirection] = useState('asc');
 
-  // store states
   const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
   const error = useSelector(state => state.stocks.error)
-
-  // store/API interaction methods
   const dispatch = useDispatch();
+
   const useFetching = (someFetchActionCreator, dispatch) => {
     useEffect(() => {
       dispatch(someFetchActionCreator());
@@ -44,9 +34,6 @@ const Stocks = () => {
     const newStock = { ...stock, heart: updatedHeart, star: updatedStar };
     dispatch(updateStockRequest(newStock)) // already using useDispatch() from react-redux so this is fine.
   }
-
-  // general methods
-  const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
   const getItemIdFromSymbol = (symbol) => {
     const stockOfInterest = stocks.find(stock => stock.symbol === symbol);
     return stockOfInterest.id
@@ -60,9 +47,10 @@ const Stocks = () => {
     setSortField(sortField);
     setSortDirection(sortDirection);
   };
-
   const sortedStocks = stocks.sort(compareValues(sortField, sortDirection));
-  const items = sortedStocks.slice(pageIndex, Math.floor(pageIndex + pageSize)); // for pagination and sorting
+  const items = sortedStocks.slice(pageIndex, Math.floor(pageIndex + pageSize));
+
+  const renderStockLink = (item) => <span><EuiLink name={item.name} {...getRouterLinkProps(`${item.ref}`)}>{item.name}</EuiLink></span>
 
   const getRowProps = item => {
     const { id, symbol } = item;
