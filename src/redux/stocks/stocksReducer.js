@@ -3,6 +3,7 @@ import stocksActions from './stocksActions';
 export const initialState = {
   allStocks: [],
   selectedStock: null,
+  selectedStocks: [],
   error: null
 };
 
@@ -23,6 +24,13 @@ export default function stocksReducer(currentState = initialState, action) {
       };
       return newState;
     }
+    case stocksActions.CLEAR_STOCKS_ERROR: {
+      const newState = {
+        ...currentState,
+        error: null,
+      }
+      return newState;
+    }
     case stocksActions.UPDATE_STOCK_SUCCESS: {
       const updatedStocks = currentState.allStocks.map((stock, idx) => {
         if (stock.id === action.updatedStock.id) {
@@ -34,6 +42,38 @@ export default function stocksReducer(currentState = initialState, action) {
         ...currentState,
         allStocks: updatedStocks
       };
+      return newState;
+    }
+    case stocksActions.ADD_SELECTED_STOCKS: {
+      const newState = {
+        ...currentState,
+        selectedStocks: action.selectedStocks,
+      }
+      return newState;
+    }
+    case stocksActions.DELETE_SINGLE_STOCK_SUCCESS: {
+      const allStocksWithoutDeleted = currentState.allStocks.filter((stock, idx) => {
+        return action.stockId !== stock.id;
+      });
+      const selectedStocksWithoutDeleted = currentState.selectedStocks.filter((stock, idx) => {
+        return action.stockId !== stock.id;
+      })
+      const updatedSelectedStock = currentState.selectedStock.id === action.stockId ? null : currentState.selectedStock;
+      const newState = {
+        ...allStocksWithoutDeleted,
+        selectedStock: updatedSelectedStock,
+        selectedStocks: selectedStocksWithoutDeleted,
+        error: null,
+      }
+      return newState;
+    }
+    case stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS: {
+      const allStocksWithoutDeleted = currentState.allStocks.filter(stock => !action.stocksIds.includes(stock.id));
+      const newState = {
+        ...currentState,
+        allStocks: allStocksWithoutDeleted,
+        error: null,
+      }
       return newState;
     }
     default:

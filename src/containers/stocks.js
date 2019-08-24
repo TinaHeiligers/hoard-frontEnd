@@ -10,15 +10,18 @@ import { getRouterLinkProps } from '../routerConversion';
 import stocksActions from '../redux/stocks/stocksActions';
 const loadStocksRequest = stocksActions.loadStocksRequest;
 const updateStockRequest = stocksActions.updateStockRequest;
+const addSelectedStocks = stocksActions.addSelectedStocks;
+const deleteMultipleStocks = stocksActions.deleteStocks;
 
 const Stocks = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortField, setSortField] = useState('symbol');
   const [sortDirection, setSortDirection] = useState('asc');
-
-  const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
   const error = useSelector(state => state.stocks.error)
+  const stocks = useSelector(state => state.stocks && state.stocks.allStocks ? state.stocks.allStocks : null);
+  const selectedStocks = useSelector(state => state.stocks && state.stocks.selectedStocks ? state.stocks.selectedStocks : []);
+
   const dispatch = useDispatch();
 
   const useFetching = (someFetchActionCreator, dispatch) => {
@@ -34,6 +37,15 @@ const Stocks = () => {
     const newStock = { ...stock, heart: updatedHeart, star: updatedStar };
     dispatch(updateStockRequest(newStock)) // already using useDispatch() from react-redux so this is fine.
   }
+
+  const onSelectionChange = selectedItems => {
+    dispatch(addSelectedStocks(selectedItems));
+  };
+
+  const onClickDelete = () => {
+    dispatch(deleteMultipleStocks(selectedStocks));
+  }
+
   const getItemIdFromSymbol = (symbol) => {
     const stockOfInterest = stocks.find(stock => stock.symbol === symbol);
     return stockOfInterest.id

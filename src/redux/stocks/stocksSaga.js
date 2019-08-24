@@ -37,9 +37,53 @@ export function* updateStockRequest(action) {
   }
 }
 
+export function* deleteMultipleStocksRequestWatcher() {
+  yield takeEvery(stocksActions.DELETE_MULTIPLE_STOCKS_REQUEST, deleteMultipleStocksRequest);
+}
+
+export function* deleteMultipleStocksRequest(action) {
+  const stockIds = action.stockIds;
+  try {
+    yield action.stockIds.forEach(function* (id) {
+      yield put({
+        type: stocksActions.DELETE_SINGLE_STOCK_REQUEST,
+        stockId: id,
+      });
+    })
+    yield put({
+      type: stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS,
+      stockIds: stockIds,
+    })
+  } catch (err) {
+    yield put({ type: stocksActions.STOCKS_ERROR, error: err })
+  }
+}
+
+export function* deleteSingleStockRequestWatcher() {
+  yield takeEvery(stocksActions.DELETE_SINGLE_STOCK_REQUEST, deleteSingleStockRequest);
+}
+
+export function* deleteSingleStockRequest(action) {
+  const stockId = action.stockId;
+  try {
+    yield call(deleteStock, action.stockId);
+    yield put({
+      type: stocksActions.DELETE_SINGLE_STOCK_SUCCESS,
+      stockId: stockId
+    })
+  } catch (err) {
+    yield put({
+      type: stocksActions.STOCKS_ERROR,
+      error: err
+    })
+  }
+}
+
 export default function* stocksSaga() {
   yield all([
     fork(loadStocksRequestWatcher),
-    fork(updateStockRequestWatcher)
+    fork(updateStockRequestWatcher),
+    fork(deleteMultipleStocksRequestWatcher),
+    fork(deleteSingleStockRequestWatcher),
   ]);
 }
