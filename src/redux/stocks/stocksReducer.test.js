@@ -60,5 +60,13 @@ describe('stocks reducer -> load stocks', () => {
     expect(newState.allStocks.length).toEqual(1);
     expect(newState.selectedStocks.length).toEqual(0);
     expect(newState.error).toBeNull();
-  })
+  });
+  it('adds a new stock to allStocks on state on CREATE_STOCK_SUCCESS', () => {
+    const testState = { ...defaultState, allStocks: [{ id: 1 }, { id: 2 }] };
+    const newStock = { id: 4, symbol: 'TE' };
+    const testAction = stocksActions.createStockSuccess(newStock);
+    const newState = stocksReducer(testState, testAction);
+    expect(newState.allStocks.length).toEqual(3);
+    expect(newState.allStocks).toEqual(expect.arrayContaining([{ id: 1 }, { id: 2 }, { id: 4, symbol: 'TE' }]))
+  });
 });

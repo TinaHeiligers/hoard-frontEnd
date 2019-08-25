@@ -10,6 +10,9 @@ const stocksActions = {
   DELETE_MULTIPLE_STOCKS_SUCCESS: 'DELETE_MULTIPLE_STOCKS_SUCCESS',
   DELETE_SINGLE_STOCK_REQUEST: 'DELETE_SINGLE_STOCK_REQUEST',
   DELETE_SINGLE_STOCK_SUCCESS: 'DELETE_SINGLE_STOCK_SUCCESS',
+  CREATE_STOCK_REQUEST: 'CREATE_STOCK_REQUEST',
+  CREATE_STOCK_ERROR: 'CREATE_STOCK_ERROR',
+  CREATE_STOCK_SUCCESS: 'CREATE_STOCK_SUCCESS',
   addSelectedStocks: (selectedStockIds) => ({
     type: stocksActions.ADD_SELECTED_STOCKS,
     selectedStocks: selectedStockIds,
@@ -50,6 +53,14 @@ const stocksActions = {
   deleteSingleStockSuccess: (id) => ({
     type: stocksActions.DELETE_SINGLE_STOCK_SUCCESS,
     stockId: id,
+  }),
+  createStockRequest: symbol => ({
+    type: stocksActions.CREATE_STOCK_REQUEST,
+    symbol: symbol
+  }),
+  createStockSuccess: newStock => ({
+    type: stocksActions.CREATE_STOCK_SUCCESS,
+    newStock: newStock
   }),
 };
 export default stocksActions;

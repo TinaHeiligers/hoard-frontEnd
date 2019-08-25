@@ -80,6 +80,16 @@ export default function stocksReducer(currentState = initialState, action) {
       }
       return newState;
     }
+    case stocksActions.CREATE_STOCK_SUCCESS: {
+      const newStockItem = [action.newStock];
+      const allStocksWithNewStock = currentState.allStocks.concat(newStockItem);
+      const newState = {
+        ...currentState,
+        allStocks: allStocksWithNewStock,
+        error: null,
+      };
+      return newState;
+    }
     default:
       return currentState;
   }

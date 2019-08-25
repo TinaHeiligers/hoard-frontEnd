@@ -1,5 +1,5 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { loadStocks, updateStock, deleteStock } from './stocksServices';
+import { loadStocks, updateStock, deleteStock, createStock } from './stocksServices';
 import stocksActions from './stocksActions';
 import {
   loadStocksRequestWatcher,
@@ -9,7 +9,9 @@ import {
   deleteMultipleStocksRequestWatcher,
   deleteMultipleStocksRequest,
   deleteSingleStockRequestWatcher,
-  deleteSingleStockRequest
+  deleteSingleStockRequest,
+  createStockRequestWatcher,
+  createStockRequest
 } from './stocksSaga';
 import stocks, { newStock } from '../../fixtures/stocksData';
 // TODO: add tests for adding a stock
@@ -149,6 +151,41 @@ describe('stocks saga -> deleteSingleStockRequest', () => {
         type: stocksActions.STOCKS_ERROR,
         error: testError
       })
+    );
+  });
+});
+describe('stocks saga -> createStockRequestWatcher', () => {
+  const createStockRequestWatcherGen = createStockRequestWatcher();
+  it('should act on every CREATE_STOCK_REQUEST', () => {
+    expect(createStockRequestWatcherGen.next().value).toEqual(
+      takeEvery(stocksActions.CREATE_STOCK_REQUEST, createStockRequest)
+    );
+  });
+});
+describe('stocks saga -> createStockRequest', () => {
+  const testAction = { symbol: newStock.symbol };
+  const createStockRequestGen = createStockRequest(testAction);
+  it('should call the api', () => {
+    expect(createStockRequestGen.next().value).toEqual(
+      call(createStock, testAction.symbol)
+    );
+  });
+  it('should put CREATE_STOCK_SUCCES on success of the api call', () => {
+    const testResult = { data: newStock };
+    expect(createStockRequestGen.next(testResult).value).toEqual(
+      put({
+        type: stocksActions.CREATE_STOCK_SUCCESS,
+        newStock: testResult.data
+      })
+    );
+  });
+  it('should throw STOCKS_ERROR on an error from the api', () => {
+    const testError = { response: { data: { error: 'Could not create stock' } } };
+    expect(createStockRequestGen.throw(testError).value).toEqual(
+      put({
+        type: stocksActions.STOCKS_ERROR,
+        error: 'Could not create stock'
+      })
     )
   })
-})
+});

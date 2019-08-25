@@ -84,4 +84,20 @@ describe('stocks action creators -> stocksActions', () => {
       stockId: testId,
     });
   });
+  it('puts CREATE_STOCK_REQUEST with a stock symbol on createStockRequest', () => {
+    const testStockSymbol = 'TE';
+    const testCreateStockRequest = stocksActions.createStockRequest(testStockSymbol)
+    expect(testCreateStockRequest).toEqual({
+      type: stocksActions.CREATE_STOCK_REQUEST,
+      symbol: testStockSymbol
+    });
+  });
+  it('puts CREATE_STOCK_SUCCESS with the new stock as a payload on createStockSuccess', () => {
+    const testNewStock = { id: 4, symbol: 'TE' };
+    const testCreateStockSuccess = stocksActions.createStockSuccess(testNewStock);
+    expect(testCreateStockSuccess).toEqual({
+      type: stocksActions.CREATE_STOCK_SUCCESS,
+      newStock: testNewStock
+    })
+  })
 });
