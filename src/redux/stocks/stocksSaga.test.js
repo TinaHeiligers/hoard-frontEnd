@@ -5,7 +5,9 @@ import {
   loadStocksRequestWatcher,
   loadStocksRequest,
   updateStockRequestWatcher,
-  updateStockRequest
+  updateStockRequest,
+  deleteMultipleStocksRequestWatcher,
+  deleteMultipleStocksRequest
 } from './stocksSaga';
 import stocks, { newStock } from '../../fixtures/stocksData';
 // TODO: add tests for adding a stock
@@ -69,5 +71,26 @@ describe('stocks saga -> updateStockRequest', () => {
         error: testError.message
       })
     )
-  })
-})
+  });
+});
+describe('stocks saga -> deleteMultipleStocksRequestWatcher', () => {
+  const deleteMultipleStocksRequestWatcherGen = deleteMultipleStocksRequestWatcher();
+  it('should act on every DELTE_MULTIPLE_STOCKS_REQUEST', () => {
+    expect(deleteMultipleStocksRequestWatcherGen.next().value).toEqual(
+      takeEvery(stocksActions.DELETE_MULTIPLE_STOCKS_REQUEST, deleteMultipleStocksRequest)
+    )
+  });
+});
+describe('stocks saga -> deleteMultipleStocksRequest', () => {
+  const testStockIds = [1, 2];
+  const testAction = { stockIds: testStockIds };
+  const deleteMultipleStocksRequestGen = deleteMultipleStocksRequest(testAction);
+  it('should put DELETE_SINGLE_STOCK_REQUEST with each id', () => {
+    expect(deleteMultipleStocksRequestGen.next(testStockIds[0]).value).toEqual(
+      put({
+        type: stocksActions.DELETE_SINGLE_STOCK_REQUEST,
+        stockId: 1
+      })
+    );
+  });
+});
