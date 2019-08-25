@@ -5,7 +5,11 @@ export function HomeComponent({ ...routeProps }) {
 };
 
 export function About({ ...routeProps }) {
-  return <div>About Page Content</div>;
+  return (
+    <div>
+      <h1>About Page Content</h1>
+    </div>
+  );
 };
 
 export function NoMatch() {
