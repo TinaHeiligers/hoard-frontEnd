@@ -10,3 +10,8 @@ export const updateStock = async stock => {
   delete payload.createdAt;
   return await axios.put(`${baseUrl}/stocks/${stock.id}`, payload);
 }
+
+export const deleteStock = async id => {
+  const result = await axios.delete(`${baseUrl}/stocks/${id}`);
+  return result;
+}

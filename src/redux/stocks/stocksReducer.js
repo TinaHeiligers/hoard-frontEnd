@@ -55,12 +55,13 @@ export default function stocksReducer(currentState = initialState, action) {
       const allStocksWithoutDeleted = currentState.allStocks.filter((stock, idx) => {
         return action.stockId !== stock.id;
       });
-      const selectedStocksWithoutDeleted = currentState.selectedStocks.filter((stock, idx) => {
-        return action.stockId !== stock.id;
+      const selectedStocksWithoutDeleted = currentState.selectedStocks.filter((stockId, idx) => {
+        return action.stockId !== stockId;
       })
-      const updatedSelectedStock = currentState.selectedStock.id === action.stockId ? null : currentState.selectedStock;
+      const updatedSelectedStock = currentState.selectedStock && currentState.selectedStock.id === action.stockId ? null : currentState.selectedStock;
       const newState = {
-        ...allStocksWithoutDeleted,
+        ...currentState,
+        allStocks: allStocksWithoutDeleted,
         selectedStock: updatedSelectedStock,
         selectedStocks: selectedStocksWithoutDeleted,
         error: null,

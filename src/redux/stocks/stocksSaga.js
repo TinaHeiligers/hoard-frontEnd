@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import stocksActions from './stocksActions';
-import { loadStocks, updateStock } from './stocksServices';
+import { loadStocks, updateStock, deleteStock } from './stocksServices';
 
 export function* loadStocksRequestWatcher() {
   yield takeEvery(stocksActions.LOAD_STOCKS_REQUEST, loadStocksRequest);
@@ -44,16 +44,12 @@ export function* deleteMultipleStocksRequestWatcher() {
 export function* deleteMultipleStocksRequest(action) {
   const stockIds = action.stockIds;
   try {
-    yield action.stockIds.forEach(function* (id) {
+    for (let id of stockIds) {
       yield put({
         type: stocksActions.DELETE_SINGLE_STOCK_REQUEST,
         stockId: id,
       });
-    })
-    yield put({
-      type: stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS,
-      stockIds: stockIds,
-    })
+    }
   } catch (err) {
     yield put({ type: stocksActions.STOCKS_ERROR, error: err })
   }
