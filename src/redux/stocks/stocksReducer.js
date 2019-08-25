@@ -57,7 +57,7 @@ export default function stocksReducer(currentState = initialState, action) {
       });
       const selectedStocksWithoutDeleted = currentState.selectedStocks.filter((stockId, idx) => {
         return action.stockId !== stockId;
-      })
+      });
       const updatedSelectedStock = currentState.selectedStock && currentState.selectedStock.id === action.stockId ? null : currentState.selectedStock;
       const newState = {
         ...currentState,

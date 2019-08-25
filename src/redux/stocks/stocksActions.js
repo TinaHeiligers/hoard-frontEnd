@@ -40,16 +40,15 @@ const stocksActions = {
     type: stocksActions.DELETE_MULTIPLE_STOCKS_REQUEST,
     stockIds: stockIds
   }),
-  deleteMultipleStocksSuccess: (count) => ({
+  deleteMultipleStocksSuccess: () => ({
     type: stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS,
-    count: count
   }),
   deleteSingleStockRequest: (id) => ({
     type: stocksActions.DELETE_SINGLE_STOCK_REQUEST,
     stockId: id,
   }),
   deleteSingleStockSuccess: (id) => ({
-    type: stocksActions.DELETE_SINGLE_STOCKS_SUCCESS,
+    type: stocksActions.DELETE_SINGLE_STOCK_SUCCESS,
     stockId: id,
   }),
 };

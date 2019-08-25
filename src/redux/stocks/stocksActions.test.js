@@ -24,6 +24,12 @@ describe('stocks action creators -> stocksActions', () => {
       error: testError.message
     });
   });
+  it('puts CLEAR_STOCKS_ERROR on clearStocksError', () => {
+    const testClearStocksError = stocksActions.clearStocksError();
+    expect(testClearStocksError).toEqual({
+      type: stocksActions.CLEAR_STOCKS_ERROR,
+    });
+  });
   it('puts UPDATE_STOCKS_REQUEST with the stock item on updateStockRequest', () => {
     const testUpdatedStock = { ...stocks.data[0], heart: true };
     const testUpdateStock = stocksActions.updateStockRequest(testUpdatedStock);
@@ -38,6 +44,44 @@ describe('stocks action creators -> stocksActions', () => {
     expect(testUpdatedStockSuccess).toEqual({
       type: stocksActions.UPDATE_STOCK_SUCCESS,
       updatedStock: testUpdatedStock
+    });
+  });
+  it('puts ADD_SELECTED_STOCKS with an array of stockIds on addSelectedStocks', () => {
+    const testStockIdsToAdd = ['10', '11'];
+    const testAddSelectedStocks = stocksActions.addSelectedStocks(testStockIdsToAdd);
+    expect(testAddSelectedStocks).toEqual({
+      type: stocksActions.ADD_SELECTED_STOCKS,
+      selectedStocks: testStockIdsToAdd,
+    })
+  })
+  it('puts DELETE_MULTIPLE_STOCKS_REQUEST with an array of ids on deleteMultipleStocksRequest', () => {
+    const testIds = ['1', '2'];
+    const testDeleteMultipleStocksRequest = stocksActions.deleteMultipleStocksRequest(testIds);
+    expect(testDeleteMultipleStocksRequest).toEqual({
+      type: stocksActions.DELETE_MULTIPLE_STOCKS_REQUEST,
+      stockIds: testIds,
+    });
+  });
+  it('puts DELETE_MULTIPLE_STOCKS_SUCCESS on deleteMultipleStocksSuccess', () => {
+    const testDeleteMultipleStocksSuccess = stocksActions.deleteMultipleStocksSuccess();
+    expect(testDeleteMultipleStocksSuccess).toEqual({
+      type: stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS,
+    });
+  });
+  it('puts DELETE_SINGLE_STOCK_REQUEST with a single id on deleteSingleStockRequest', () => {
+    const testId = 1;
+    const testDeleteSingleStockRequest = stocksActions.deleteSingleStockRequest(testId);
+    expect(testDeleteSingleStockRequest).toEqual({
+      type: stocksActions.DELETE_SINGLE_STOCK_REQUEST,
+      stockId: testId,
+    });
+  });
+  it('puts DELETE_SINGLE_STOCK_SUCCESS with a single id on deleteSingleStockSuccess', () => {
+    const testId = 1;
+    const testDeleteSingleStockSuccess = stocksActions.deleteSingleStockSuccess(testId);
+    expect(testDeleteSingleStockSuccess).toEqual({
+      type: stocksActions.DELETE_SINGLE_STOCK_SUCCESS,
+      stockId: testId,
     });
   });
 });

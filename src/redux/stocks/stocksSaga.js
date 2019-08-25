@@ -50,6 +50,9 @@ export function* deleteMultipleStocksRequest(action) {
         stockId: id,
       });
     }
+    yield put({
+      type: stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS,
+    })
   } catch (err) {
     yield put({ type: stocksActions.STOCKS_ERROR, error: err })
   }

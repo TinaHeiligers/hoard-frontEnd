@@ -32,4 +32,26 @@ describe('stocks reducer -> load stocks', () => {
     const testItem = newState.allStocks.find(stock => stock.id === testUpdatedStock.id);
     expect(testItem.star).toBeTruthy();
   });
+  it('clears the stocks error on CLEAR_STOCKS_ERROR', () => {
+    const testState = { ...defaultState, error: 'all error' };
+    const testAction = stocksActions.clearStocksError();
+    const newState = stocksReducer(testState, testAction);
+    expect(newState.error).toBe(null);
+  });
+  it('sets a given array as the selectedStocks array on ADD_SELECTED_STOCKS', () => {
+    const testState = { ...defaultState };
+    const stockIds = [1, 2]
+    const testAction = stocksActions.addSelectedStocks(stockIds);
+    const newState = stocksReducer(testState, testAction);
+    expect(newState.selectedStocks).toEqual(expect.arrayContaining(stockIds))
+  });
+  it('removes a deleted stock from allStocks and removes the stock from selectedStock if it is the same stock on DELETE_SINGLE_STOCK_SUCCESS', () => {
+    const testState = { ...defaultState, selectedStock: { id: 1 }, selectedStocks: [1, 2, 3], allStocks: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }] }
+    const testAction = stocksActions.deleteSingleStockSuccess(1);
+    const newState = stocksReducer(testState, testAction);
+    expect(newState.selectedStock).toBe(null);
+    expect(newState.allStocks.length).toEqual(3);
+    expect(newState.selectedStocks).not.toEqual(expect.arrayContaining([{ id: 1 }]));
+  });
+
 });
