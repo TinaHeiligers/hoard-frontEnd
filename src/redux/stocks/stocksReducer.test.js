@@ -45,7 +45,7 @@ describe('stocks reducer -> load stocks', () => {
     const newState = stocksReducer(testState, testAction);
     expect(newState.selectedStocks).toEqual(expect.arrayContaining(stockIds))
   });
-  it('removes a deleted stock from allStocks and removes the stock from selectedStock if it is the same stock on DELETE_SINGLE_STOCK_SUCCESS', () => {
+  it('removes a deleted stock from allStocks and removes the stock from selectedStock if it\' the one selected on DELETE_SINGLE_STOCK_SUCCESS', () => {
     const testState = { ...defaultState, selectedStock: { id: 1 }, selectedStocks: [1, 2, 3], allStocks: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }] }
     const testAction = stocksActions.deleteSingleStockSuccess(1);
     const newState = stocksReducer(testState, testAction);
@@ -53,5 +53,12 @@ describe('stocks reducer -> load stocks', () => {
     expect(newState.allStocks.length).toEqual(3);
     expect(newState.selectedStocks).not.toEqual(expect.arrayContaining([{ id: 1 }]));
   });
-
+  it('deletes multiple stocks from state on DELETE_MULTIPLE_STOCKS_SUCCESS', () => {
+    const testState = { ...defaultState, allStocks: [{ id: 1 }, { id: 2 }, { id: 3 }], selectedStocks: [1, 2] };
+    const testAction = stocksActions.deleteMultipleStocksSuccess();
+    const newState = stocksReducer(testState, testAction);
+    expect(newState.allStocks.length).toEqual(1);
+    expect(newState.selectedStocks.length).toEqual(0);
+    expect(newState.error).toBeNull();
+  })
 });

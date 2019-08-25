@@ -20,5 +20,7 @@ API: {{altBaseUrl}}/api/v1/companies/{stockSymbol}
 returns data of the form companyData.
 
 ## Tests:
-* try to figure out why husky git hooks aren't working
 * install and use react-testing-library
+
+## Bugs/unexpected behavour:
+* Sorting and pagination is not showing the last few items on the last page, it's showing items from a previous page too.

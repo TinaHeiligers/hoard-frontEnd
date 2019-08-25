@@ -69,10 +69,13 @@ export default function stocksReducer(currentState = initialState, action) {
       return newState;
     }
     case stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS: {
-      const allStocksWithoutDeleted = currentState.allStocks.filter(stock => !action.stocksIds.includes(stock.id));
+      const allStocksWithoutDeleted = currentState.allStocks.filter(stock =>
+        !currentState.selectedStocks.includes(stock.id));
+      // We'll assume if an error isn't thrown then all stocks selected for deletion are deleted.
       const newState = {
         ...currentState,
         allStocks: allStocksWithoutDeleted,
+        selectedStocks: [],
         error: null,
       }
       return newState;
