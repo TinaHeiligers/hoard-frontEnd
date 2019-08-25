@@ -32,7 +32,7 @@ export function* updateStockRequest(action) {
   } catch (err) {
     yield put({
       type: stocksActions.STOCKS_ERROR,
-      error: 'Could not update stock'
+      error: err
     })
   }
 }

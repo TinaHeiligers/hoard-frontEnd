@@ -1,5 +1,5 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { loadStocks, updateStock } from './stocksServices';
+import { loadStocks, updateStock, deleteStock } from './stocksServices';
 import stocksActions from './stocksActions';
 import {
   loadStocksRequestWatcher,
@@ -7,7 +7,9 @@ import {
   updateStockRequestWatcher,
   updateStockRequest,
   deleteMultipleStocksRequestWatcher,
-  deleteMultipleStocksRequest
+  deleteMultipleStocksRequest,
+  deleteSingleStockRequestWatcher,
+  deleteSingleStockRequest
 } from './stocksSaga';
 import stocks, { newStock } from '../../fixtures/stocksData';
 // TODO: add tests for adding a stock
@@ -68,14 +70,14 @@ describe('stocks saga -> updateStockRequest', () => {
     expect(updateStockRequestGen.throw(testError).value).toEqual(
       put({
         type: stocksActions.STOCKS_ERROR,
-        error: testError.message
+        error: testError
       })
     )
   });
 });
 describe('stocks saga -> deleteMultipleStocksRequestWatcher', () => {
   const deleteMultipleStocksRequestWatcherGen = deleteMultipleStocksRequestWatcher();
-  it('should act on every DELTE_MULTIPLE_STOCKS_REQUEST', () => {
+  it('should act on every DELETE_MULTIPLE_STOCKS_REQUEST', () => {
     expect(deleteMultipleStocksRequestWatcherGen.next().value).toEqual(
       takeEvery(stocksActions.DELETE_MULTIPLE_STOCKS_REQUEST, deleteMultipleStocksRequest)
     )
@@ -85,12 +87,68 @@ describe('stocks saga -> deleteMultipleStocksRequest', () => {
   const testStockIds = [1, 2];
   const testAction = { stockIds: testStockIds };
   const deleteMultipleStocksRequestGen = deleteMultipleStocksRequest(testAction);
-  it('should put DELETE_SINGLE_STOCK_REQUEST with each id', () => {
-    expect(deleteMultipleStocksRequestGen.next(testStockIds[0]).value).toEqual(
+  it('should put DELETE_SINGLE_STOCK_REQUEST with each id in the given id', () => {
+    expect(deleteMultipleStocksRequestGen.next().value).toEqual(
       put({
         type: stocksActions.DELETE_SINGLE_STOCK_REQUEST,
         stockId: 1
       })
     );
+    expect(deleteMultipleStocksRequestGen.next(testStockIds[0]).value).toEqual(
+      put({
+        type: stocksActions.DELETE_SINGLE_STOCK_REQUEST,
+        stockId: 2
+      })
+    );
+  });
+  it('should put DELETE_MULTIPLE_STOCKS_SUCCESS when all items in the array have been worked through', () => {
+    expect(deleteMultipleStocksRequestGen.next().value).toEqual(
+      put({
+        type: stocksActions.DELETE_MULTIPLE_STOCKS_SUCCESS
+      })
+    );
+  });
+  it('should put STOCKS_ERROR on an error', () => {
+    const testError = { message: 'Could not delete stocks' };
+    expect(deleteMultipleStocksRequestGen.throw(testError).value).toEqual(
+      put({
+        type: stocksActions.STOCKS_ERROR,
+        error: testError
+      })
+    );
   });
 });
+describe('stocks saga -> deleteSingleStockRequestWatcher', () => {
+  const deleteSingleStockRequestWatcherGen = deleteSingleStockRequestWatcher();
+  it('should act on every DELETE_SINGLE_STOCK_REQUEST', () => {
+    expect(deleteSingleStockRequestWatcherGen.next().value).toEqual(
+      takeEvery(stocksActions.DELETE_SINGLE_STOCK_REQUEST, deleteSingleStockRequest)
+    );
+  });
+});
+describe('stocks saga -> deleteSingleStockRequest', () => {
+  const testAction = { stockId: 1 };
+  const deleteSingleStockRequestGen = deleteSingleStockRequest(testAction);
+  it('should call the api when given an id', () => {
+    expect(deleteSingleStockRequestGen.next().value).toEqual(
+      call(deleteStock, 1)
+    );
+  });
+  it('should put DELETE_SINGLE_STOCK_SUCCESS on successful return from the api', () => {
+    expect(deleteSingleStockRequestGen.next().value).toEqual(
+      put({
+        type: stocksActions.DELETE_SINGLE_STOCK_SUCCESS,
+        stockId: 1
+      })
+    );
+  });
+  it('should throw an error if the api returns an error', () => {
+    const testError = { message: 'Cannot delete stock' };
+    expect(deleteSingleStockRequestGen.throw(testError).value).toEqual(
+      put({
+        type: stocksActions.STOCKS_ERROR,
+        error: testError
+      })
+    )
+  })
+})
