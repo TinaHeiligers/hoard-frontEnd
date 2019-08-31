@@ -183,7 +183,7 @@ const Stocks = () => {
   } else if (stocks && stocks.length) {
     return (
       <Fragment>
-        <AddStockForm />
+        <AddStockForm symbols={stocks.map(stockItem => stockItem.symbol)} />
         {renderDeleteButton()}
         <EuiBasicTable
           items={items}
