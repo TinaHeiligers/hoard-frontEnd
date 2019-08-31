@@ -33,7 +33,6 @@ export default class AddStockForm extends Component {
 
   render() {
     return (
-
       <EuiForm>
         <EuiDescribedFormGroup
           idAria="single-example-aria"
@@ -45,10 +44,10 @@ export default class AddStockForm extends Component {
             </Fragment>
           }>
           <EuiFlexGroup>
-            <EuiFlexItem>
+            <EuiFlexItem grow={2}>
               <EuiFormRow
                 label="Text field"
-                helpText="I am some friendly help text."
+                helpText="Ticker symbol"
                 describedByIds={['single-example-aria']}
                 onChange={this.handleChange}>
                 <EuiFieldText
@@ -58,7 +57,7 @@ export default class AddStockForm extends Component {
                   onChange={this.handleChange} />
               </EuiFormRow>
             </EuiFlexItem>
-            <EuiFlexItem>
+            <EuiFlexItem grow={1}>
               <EuiFormRow hasEmptyLabelSpace>
                 <EuiButton type="submit" onClick={this.handleSubmit} size="s" fill>Add</EuiButton>
               </EuiFormRow>
