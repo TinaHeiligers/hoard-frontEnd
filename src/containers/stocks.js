@@ -8,7 +8,7 @@ import {
 } from '@elastic/eui';
 import { compareValues } from '../utilities/generalMethods';
 import { getRouterLinkProps } from '../routerConversion';
-import AddStockForm from '../components/addStock'
+import { AddStockForm } from '../components/addStock'
 import stocksActions from '../redux/stocks/stocksActions';
 const loadStocksRequest = stocksActions.loadStocksRequest;
 const updateStockRequest = stocksActions.updateStockRequest;
