@@ -9,11 +9,13 @@ import {
 import { compareValues } from '../utilities/generalMethods';
 import { getRouterLinkProps } from '../routerConversion';
 import { AddStockForm } from '../components/addStock'
+import Error from '../components/ErrorBoundary';
 import stocksActions from '../redux/stocks/stocksActions';
 const loadStocksRequest = stocksActions.loadStocksRequest;
 const updateStockRequest = stocksActions.updateStockRequest;
 const addSelectedStocks = stocksActions.addSelectedStocks;
 const deleteMultipleStocks = stocksActions.deleteMultipleStocksRequest;
+const clearStocksError = stocksActions.clearStocksError;
 
 const Stocks = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -61,6 +63,9 @@ const Stocks = () => {
     return <EuiButton color="danger" iconType="trash" onClick={onClickDelete}>
       Delete {selectedStocks.length} stock{selectedStocks.length > 1 ? 's' : ''}
     </EuiButton>
+  }
+  const clearError = () => {
+    dispatch(clearStocksError())
   }
   // Ui change methods
   const onTableChange = ({ page = {}, sort = {} }) => {
@@ -179,7 +184,9 @@ const Stocks = () => {
   };
 
   if (error) {
-    return <h1>We have an error: {JSON.stringify(error)}</h1>
+    return (
+      <Error />
+    );
   } else if (stocks && stocks.length) {
     return (
       <Fragment>

@@ -14,6 +14,7 @@ import {
 } from '@elastic/eui';
 import stocksActions from '../redux/stocks/stocksActions';
 const createStockRequest = stocksActions.createStockRequest;
+const clearStocksError = stocksActions.clearStocksError;
 
 export const AddStockForm = ({ symbols }) => {
   const [value, setValue] = useState('');
@@ -54,6 +55,7 @@ export const AddStockForm = ({ symbols }) => {
   }
 
   const clearError = () => {
+    dispatch(clearStocksError())
     setError([])
     setValue('')
   }
