@@ -1,6 +1,6 @@
 
 /*eslint no-unused-vars: "warn"*/
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   EuiButton,
@@ -31,12 +31,13 @@ export const AddStockForm = ({ symbols }) => {
 
   }
   const handleSubmit = () => {
+    let isMounted = true;
     setIsLoading(true);
     dispatch(createStockRequest(value))
-    setTimeout(() => {
+    if (isMounted) {
       setIsLoading(false);
-      setValue('');
-    }, 500);
+      setValue('')
+    }
   }
 
   const handleValidate = () => {

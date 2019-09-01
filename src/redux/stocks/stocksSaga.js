@@ -90,6 +90,7 @@ export function* createStockRequest(action) {
       newStock: result.data
     });
   } catch (err) {
+    // Only returning the error message, not the status code.
     yield put({
       type: stocksActions.STOCKS_ERROR,
       error: err.response.data.error

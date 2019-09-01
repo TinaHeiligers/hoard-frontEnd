@@ -15,7 +15,6 @@ const loadStocksRequest = stocksActions.loadStocksRequest;
 const updateStockRequest = stocksActions.updateStockRequest;
 const addSelectedStocks = stocksActions.addSelectedStocks;
 const deleteMultipleStocks = stocksActions.deleteMultipleStocksRequest;
-const clearStocksError = stocksActions.clearStocksError;
 
 const Stocks = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -63,9 +62,6 @@ const Stocks = () => {
     return <EuiButton color="danger" iconType="trash" onClick={onClickDelete}>
       Delete {selectedStocks.length} stock{selectedStocks.length > 1 ? 's' : ''}
     </EuiButton>
-  }
-  const clearError = () => {
-    dispatch(clearStocksError())
   }
   // Ui change methods
   const onTableChange = ({ page = {}, sort = {} }) => {
