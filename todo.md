@@ -2,10 +2,6 @@
 ## Table Functionality:
 * implement deletion of single stock only -> use a custom action in Eui Table.
 * implement filtering to table
-* implement adding a new item by Symbol:
-  ~~* change component to functional component~~
-  * wire up redux
-  * add form validation
 * add sparklines (consider https://github.com/borisyankov/react-sparklines if compatibile with current work)
 * implement table row expansion to show additional info for when a stock is selected (Stocks view below)
 ## Stocks view

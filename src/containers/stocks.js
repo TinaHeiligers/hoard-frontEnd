@@ -5,6 +5,8 @@ import {
   EuiButton,
   EuiButtonIcon,
   EuiLink,
+  EuiFlexGroup,
+  EuiFlexItem,
 } from '@elastic/eui';
 import { compareValues } from '../utilities/generalMethods';
 import { getRouterLinkProps } from '../routerConversion';
@@ -55,14 +57,12 @@ const Stocks = () => {
     return stockOfInterest.id
   };
 
-  const renderDeleteButton = () => {
-    if (selectedStocks.length === 0) {
-      return;
-    }
-    return <EuiButton color="danger" iconType="trash" onClick={onClickDelete}>
-      Delete {selectedStocks.length} stock{selectedStocks.length > 1 ? 's' : ''}
-    </EuiButton>
-  }
+  const renderDeleteButton = () => (
+    selectedStocks.length === 0 ? <div /> :
+      (<EuiButton color="danger" iconType="trash" onClick={onClickDelete}>
+        Delete {selectedStocks.length} stock{selectedStocks.length > 1 ? 's' : ''}
+      </EuiButton>)
+  )
   // Ui change methods
   const onTableChange = ({ page = {}, sort = {} }) => {
     const { index: pageIndex, size: pageSize } = page;
@@ -186,8 +186,14 @@ const Stocks = () => {
   } else if (stocks && stocks.length) {
     return (
       <Fragment>
-        <AddStockForm symbols={stocks.map(stockItem => stockItem.symbol)} />
-        {renderDeleteButton()}
+        <EuiFlexGroup>
+          <EuiFlexItem grow={3}>
+            <AddStockForm symbols={stocks.map(stockItem => stockItem.symbol)} />
+          </EuiFlexItem>
+          <EuiFlexItem grow={1}>
+            {renderDeleteButton()}
+          </EuiFlexItem>
+        </EuiFlexGroup>
         <EuiBasicTable
           items={items}
           itemId="id"
@@ -199,7 +205,8 @@ const Stocks = () => {
           selection={selection}
           onChange={onTableChange}
         />
-      </Fragment>)
+      </Fragment>
+    )
   } else {
     return (<div>Loading...</div>)
   }

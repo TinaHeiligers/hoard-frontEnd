@@ -27,6 +27,8 @@ export default function stocksReducer(currentState = initialState, action) {
     case stocksActions.CLEAR_STOCKS_ERROR: {
       const newState = {
         ...currentState,
+        selectedStock: null,
+        selectedStocks: [],
         error: null,
       }
       return newState;
