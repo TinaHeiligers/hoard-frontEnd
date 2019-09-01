@@ -18,77 +18,94 @@ const createStockRequest = stocksActions.createStockRequest;
 export const AddStockForm = ({ symbols }) => {
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const error = useSelector(state => state.stocks.error);
-  const [formError, setError] = useState(error);
+  const [formError, setError] = useState([]);
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setValue(event.target.value);
   }
-  const handleSubmit = (event) => {
+  const onInitiateSubmit = (event) => {
     event.preventDefault();
     handleValidate();
-    console.log('formError', formError)
-    console.log('error', error)
-    if (!formError) {
-      setIsLoading(true);
-      dispatch(createStockRequest(value))
-      setTimeout(() => {
-        setIsLoading(false);
-        setValue('');
-      }, 500);
-    }
+
+  }
+  const handleSubmit = () => {
+    setIsLoading(true);
+    dispatch(createStockRequest(value))
+    setTimeout(() => {
+      setIsLoading(false);
+      setValue('');
+    }, 500);
   }
 
   const handleValidate = () => {
     const dup = symbols.includes(value);
-    console.log('dup', dup)
     const pattern = /^[A-Z]{2,5}((.|-)[A-Z])?$/;
-    if (dup) setError('Duplicate symbol');
-    if (!value.toUpperCase().match(pattern)) setError('Not a valid symbol');
+    if (!value.toUpperCase().match(pattern)) {
+      setError(formError => formError.concat('Not a valid symbol'));
+    }
+    if (dup) {
+      setError(formError => formError.concat('Duplicate symbol'));
+    }
+    if (dup || !value.toUpperCase().match(pattern)) return;
+    else {
+      handleSubmit()
+    };
   }
 
-  if (error || formError) {
-    return <div>{error || formError}</div>
-  } else
-    return (
-      <EuiForm>
-        <EuiDescribedFormGroup
-          idAria="single-example-aria"
-          title={<h3>Add a stock</h3>}
-          description={
-            <Fragment>
-              Enter a stock symbol, e.g. <EuiCode>ABC</EuiCode>.
+  const clearError = () => {
+    setError([])
+    setValue('')
+  }
+  const clearErrorButton = (
+    <EuiButton fill color="danger" onClick={clearError}>Clear Form</EuiButton>
+  )
+
+  return (
+    <EuiForm isInvalid={formError.length > 0} errors={formError}>
+      <EuiDescribedFormGroup
+        idAria="single-example-aria"
+        title={<h3>Add a stock</h3>}
+        description={
+          <Fragment>
+            Enter a stock symbol, e.g. <EuiCode>ABC</EuiCode>.
                 To search for a stock symbol on the NYSE, see <a href="http://eoddata.com/symbols.aspx" taget="_blank">NYSE symbols</a>
-            </Fragment>
-          }>
-          <EuiFlexGroup>
-            <EuiFlexItem grow={2}>
-              <EuiFormRow
-                label="Text field"
-                helpText="Enter a 3 letter NYSE symbol"
-                describedByIds={['single-example-aria']}
-                onChange={handleChange}>
-                <EuiFieldText
-                  name="symbol"
-                  placeholder="Ticker symbol"
-                  isLoading={isLoading}
-                  value={value}
-                  onChange={setValue} />
-              </EuiFormRow>
-            </EuiFlexItem>
-            <EuiFlexItem grow={1}>
-              <EuiFormRow hasEmptyLabelSpace>
+          </Fragment>
+        }>
+        <EuiFlexGroup>
+          <EuiFlexItem grow={2}>
+            <EuiFormRow
+              label="Text field"
+              helpText="Enter a 3 letter NYSE symbol"
+              describedByIds={['single-example-aria']}
+              onChange={handleChange}
+              isInvalid={formError.length > 0}
+              error={formError}
+            >
+              <EuiFieldText
+                name="symbol"
+                placeholder="Ticker symbol"
+                isLoading={isLoading}
+                value={value}
+                onChange={setValue}
+                isInvalid={formError.length > 0} />
+            </EuiFormRow>
+          </EuiFlexItem>
+          <EuiFlexItem grow={1}>
+            <EuiFormRow hasEmptyLabelSpace>
+              {formError.length > 0 ? clearErrorButton :
                 <EuiButton
-                  disabled={true}
+                  disabled={formError.length > 0}
                   type="submit"
-                  onClick={handleSubmit}
+                  onClick={onInitiateSubmit}
                   size="s"
                   fill>Add</EuiButton>
-              </EuiFormRow>
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </EuiDescribedFormGroup >
-      </EuiForm >
-    )
+              }
+            </EuiFormRow>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+
+      </EuiDescribedFormGroup >
+    </EuiForm >
+  )
 }
